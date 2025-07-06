@@ -15,7 +15,7 @@ class UserTesting(APITestCase):
         pass
     def test_get_token_failure(self):
         pass
-    def delete_user_success(self):
+    def test_delete_user_success(self):
         pass
-    def delete_user_failure(self):
+    def test_delete_user_failure(self):
         pass
