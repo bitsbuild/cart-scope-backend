@@ -13,7 +13,7 @@ class UserSerializer(ModelSerializer):
             raise ValidationError("Username Exists Already!")
         elif data['password'] != data['confirm_password']:
             raise ValidationError("Passwords Do Not Match")
-        elif User.objects.filter(password=data['password']).exists():
+        elif User.objects.filter(email=data['email']).exists():
             raise ValidationError("Existing Account Connected To This Mail ID")
         else:
             return data
