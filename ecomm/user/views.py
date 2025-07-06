@@ -1,10 +1,9 @@
-from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,authentication_classes
 from user.serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
 @api_view(['POST'])
 def create_user(request):
     user_data = request.data
@@ -24,6 +23,7 @@ def create_user(request):
             "Error":""
         },status=status.HTTP_400_BAD_REQUEST)
 @api_view(['DELETE'])
+@authentication_classes([IsAuthenticated])
 def delete_user(request):
     try:
         request.user.delete()
