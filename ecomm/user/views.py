@@ -1,4 +1,4 @@
-from rest_framework.decorators import api_view,authentication_classes
+from rest_framework.decorators import api_view,permission_classes
 from user.serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
@@ -23,7 +23,7 @@ def create_user(request):
             "Error":""
         },status=status.HTTP_400_BAD_REQUEST)
 @api_view(['DELETE'])
-@authentication_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def delete_user(request):
     try:
         request.user.delete()
