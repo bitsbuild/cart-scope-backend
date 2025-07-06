@@ -10,8 +10,8 @@ def create_user(request):
     user_data = request.data
     srlzr = UserSerializer(data=user_data)
     if srlzr.is_valid():
-        srlzr.save()
-        token = Token.objects.filter(user__username=request.data['username'])
+        user = srlzr.save()
+        token,_ = Token.objects.get_or_create(user=user)
         return Response({
             "Status":"Account Creation Successful",
             "Username":str(request.data['username']),
