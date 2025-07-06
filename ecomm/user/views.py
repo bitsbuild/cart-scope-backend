@@ -1,1 +1,39 @@
 from django.shortcuts import render
+from rest_framework.decorators import api_view
+from user.serializers import UserSerializer
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+@api_view(['POST'])
+def create_user(request):
+    user_data = request.data
+    srlzr = UserSerializer(data=user_data)
+    if srlzr.is_valid():
+        srlzr.save()
+        token = Token.objects.filter(user__username=request.data['username'])
+        return Response({
+            "Status":"Account Creation Successful",
+            "Username":str(request.data['username']),
+            "Email":str(request.data['email']),
+            "Token":str(token.key)
+        },status=status.HTTP_200_OK)
+    else:
+        return Response({
+            "Status":"Error",
+            "Error":""
+        },status=status.HTTP_400_BAD_REQUEST)
+@api_view(['DELETE'])
+def delete_user(request):
+    try:
+        request.user.delete()
+        return Response(
+            {
+                "Status":"Account Deletion Successful"
+            },status=status.HTTP_200_OK
+        )
+    except Exception as error:
+        return Response({
+            "Status":"Account Deletion Failed",
+            "Error":str(error)
+            },status=status.HTTP_400_BAD_REQUEST)
