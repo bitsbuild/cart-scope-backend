@@ -8,7 +8,7 @@ class UserTesting(APITestCase):
         data = {
             "username":"bitsbuild",
             "password":"password",
-            "email":"email",
+            "email":"email@email.com",
             "confirm_password":"password"
         }
         response = self.client.post(reverse('create'),data)
@@ -18,6 +18,8 @@ class UserTesting(APITestCase):
     def test_create_user_failure_username_exists(self):
         pass
     def test_create_user_failure_account_with_email_exists(self):
+        pass
+    def test_create_user_failure_invalid_email_format(self):
         pass
     def test_get_token_success(self):
         pass
