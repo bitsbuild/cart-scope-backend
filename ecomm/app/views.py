@@ -1,7 +1,12 @@
 from rest_framework.viewsets import ModelViewSet
+from app.models import Seller,ProductCategory,Product
+from app.serializers import SellerSerializer,ProductCategorySerializer,ProductSerializer
 class SellerViewSet(ModelViewSet):
-    pass
+    queryset = Seller.objects.all()
+    serializer_class = SellerSerializer
 class ProductCategoryViewSet(ModelViewSet):
-    pass
+    queryset = ProductCategory.objects.all()
+    serializer_class = ProductCategorySerializer
 class ProductViewSet(ModelViewSet):
-    pass
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
