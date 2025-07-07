@@ -13,11 +13,6 @@ from django.db.models import (
 )
 from django.core.validators import MinValueValidator,MaxValueValidator
 import uuid
-class ProductCategory(Model):
-    id = UUIDField(primary_key=True,editable=False,default=uuid.uuid4,blank=False)
-    name = CharField(max_length=700,blank=False)
-    def __str__(self):
-        return self.name
 class Seller(Model):
     id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False,blank=False)
     name = CharField(max_length=700,blank=False)
@@ -28,6 +23,11 @@ class Seller(Model):
     rating = FloatField(validators=[MinValueValidator(0),MaxValueValidator(5)],default=0,blank=False,editable=False)
     created = DateTimeField(auto_now_add=True,editable=False,blank=False)
     updated = DateTimeField(auto_now=True,editable=False,blank=False)
+    def __str__(self):
+        return self.name
+class ProductCategory(Model):
+    id = UUIDField(primary_key=True,editable=False,default=uuid.uuid4,blank=False)
+    name = CharField(max_length=700,blank=False)
     def __str__(self):
         return self.name
 class Product(Model):
