@@ -13,6 +13,9 @@ from django.db.models import (
 )
 from django.core.validators import MinValueValidator,MaxValueValidator
 import uuid
+class ProductCategory(Model):
+    id = UUIDField(primary_key=True,editable=False,default=uuid.uuid4,blank=False)
+    name = CharField(max_length=700,blank=False)
 class Seller(Model):
     id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False,blank=False)
     name = CharField(max_length=700,blank=False)
@@ -26,6 +29,7 @@ class Product(Model):
     id = UUIDField(primary_key=True,editable=False,default=uuid.uuid4,blank=False)
     name = CharField(max_length=700,blank=False)
     about = TextField(max_length=3500,blank=False)
+    category = ForeignKey(ProductCategory,related_name='products',on_delete=CASCADE,blank=False)
     seller = ForeignKey(Seller,related_name='inventory',on_delete=CASCADE,blank=False)
     quantity = IntegerField(blank=False)
     price = IntegerField(blank=False)
