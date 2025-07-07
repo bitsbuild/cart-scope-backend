@@ -5,25 +5,30 @@ from django.db.models import (
     TextField,
     DateTimeField,
     ForeignKey,
-    CASCADE,
     IntegerField,
-    BigIntegerField
+    BigIntegerField,
+    FloatField,
+    BooleanField,
+    CASCADE,
 )
+from django.core.validators import MinValueValidator,MaxValueValidator
 import uuid
 class Seller(Model):
-    id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    name = CharField()
-    about = TextField()
-    location = TextField()
-    postal_code = BigIntegerField()
-    created = DateTimeField(auto_now_add=True,editable=False)
-    updated = DateTimeField(auto_now=True,editable=False)
+    id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False,blank=False)
+    name = CharField(max_length=700,blank=False)
+    about = TextField(max_length=3500,blank=False)
+    postal_code = BigIntegerField(blank=False)
+    location = TextField(blank=False)
+    rating = FloatField(validators=[MinValueValidator(0),MaxValueValidator(5)],default=0,blank=False)
+    created = DateTimeField(auto_now_add=True,editable=False,blank=False)
+    updated = DateTimeField(auto_now=True,editable=False,blank=False)
 class Product(Model):
-    id = UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
-    name = CharField()
-    about = TextField()
-    amount = IntegerField()
-    price = IntegerField()
-    created = DateTimeField(auto_now_add=True,editable=False)
-    updated = DateTimeField(auto_now=True,editable=False)
-    seller = ForeignKey(Seller,related_name='inventory',on_delete=CASCADE)
+    id = UUIDField(primary_key=True,editable=False,default=uuid.uuid4,blank=False)
+    name = CharField(max_length=700,blank=False)
+    about = TextField(max_length=3500,blank=False)
+    seller = ForeignKey(Seller,related_name='inventory',on_delete=CASCADE,blank=False)
+    quantity = IntegerField(blank=False)
+    price = IntegerField(blank=False)
+    rating = FloatField(validators=[MinValueValidator(0),MaxValueValidator(5)],default=0,blank=False)
+    created = DateTimeField(auto_now_add=True,editable=False,blank=False)
+    updated = DateTimeField(auto_now=True,editable=False,blank=False)
