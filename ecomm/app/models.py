@@ -19,7 +19,7 @@ class Seller(Model):
     about = TextField(max_length=3500,blank=False)
     postal_code = BigIntegerField(blank=False)
     location = TextField(blank=False)
-    is_premium_seller = BooleanField(default=False,blank=False,editable=False)
+    is_premium_seller = BooleanField(default=False,blank=False)
     rating = FloatField(validators=[MinValueValidator(0),MaxValueValidator(5)],default=0,blank=False,editable=False)
     created = DateTimeField(auto_now_add=True,editable=False,blank=False)
     updated = DateTimeField(auto_now=True,editable=False,blank=False)
