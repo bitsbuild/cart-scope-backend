@@ -4,3 +4,4 @@ router = DefaultRouter()
 router.register(r'seller',SellerViewSet,basename='seller')
 router.register(r'category',ProductCategoryViewSet,basename='category')
 router.register(r'product',ProductViewSet,basename='product')
+urlpatterns = router.urls
