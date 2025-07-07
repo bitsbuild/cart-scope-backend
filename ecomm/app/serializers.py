@@ -6,7 +6,7 @@ class ProductSerializer(ModelSerializer):
         fields = '__all__'
 class SellerSerializer(ModelSerializer):
     is_premium_seller = BooleanField(read_only=True)
-    products = ProductSerializer(many=True,read_only=True)
+    inventory = ProductSerializer(many=True,read_only=True)
     class Meta:
         model = Seller
         fields = '__all__'
