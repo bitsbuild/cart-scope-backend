@@ -1,6 +1,7 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer,BooleanField
 from app.models import Seller,ProductCategory,Product
 class SellerSerializer(ModelSerializer):
+    is_premium_seller = BooleanField(read_only=True)
     class Meta:
         model = Seller
         fields = '__all__'
