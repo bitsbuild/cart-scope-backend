@@ -9,6 +9,7 @@ from django.db.models import (
     BigIntegerField,
     FloatField,
     BooleanField,
+    ImageField,
     CASCADE,
 )
 from django.core.validators import MinValueValidator,MaxValueValidator
@@ -43,3 +44,7 @@ class Product(Model):
     updated = DateTimeField(auto_now=True,editable=False,blank=False)
     def __str__(self):
         return self.name
+class ProductImages(Model):
+    id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False,blank=False)
+    image = ImageField(blank=False,upload_to='product-images/')
+    product = ForeignKey(Product,related_name='images',on_delete=CASCADE)
