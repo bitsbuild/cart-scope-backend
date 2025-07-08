@@ -48,3 +48,7 @@ class ProductImages(Model):
     id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False,blank=False)
     image = ImageField(blank=False,upload_to='product-images/')
     product = ForeignKey(Product,related_name='images',on_delete=CASCADE)
+class Review(Model):
+    pass
+class Order(Model):
+    pass
