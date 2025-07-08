@@ -48,11 +48,11 @@ class Product(Model):
 class ProductImages(Model):
     id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False,blank=False)
     image = ImageField(blank=False,upload_to='product-images/')
-    product = ForeignKey(Product,related_name='images',on_delete=CASCADE)
+    product = ForeignKey(Product,related_name='images',on_delete=CASCADE,blank=False)
 class Review(Model):
     id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False,blank=False)
-    user = ForeignKey(User,related_name='reviews',on_delete=CASCADE)
-    product = ForeignKey(Product,related_name='reviews',on_delete=CASCADE)
+    user = ForeignKey(User,related_name='reviews',on_delete=CASCADE,blank=False)
+    product = ForeignKey(Product,related_name='reviews',on_delete=CASCADE,blank=False)
     title = CharField(max_length=700,blank=False)
     body = CharField(max_length=3500,blank=False)
     stars = IntegerField(blank=False,default=0,validators=[MinValueValidator(0),MaxValueValidator(5)])
