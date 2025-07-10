@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer,BooleanField
-from app.models import Seller,ProductCategory,Product,ProductImages
+from app.models import Seller,ProductCategory,Product,ProductImages,Review,Order
 class ProductImagesSerializer(ModelSerializer):
     class Meta:
         model = ProductImages
@@ -19,4 +19,8 @@ class ProductCategorySerializer(ModelSerializer):
     products = ProductSerializer(many=True,read_only=True)
     class Meta:
         model = ProductCategory
+        fields = '__all__'
+class OrderSerializer(ModelSerializer):
+    class Meta:
+        model = Order
         fields = '__all__'
