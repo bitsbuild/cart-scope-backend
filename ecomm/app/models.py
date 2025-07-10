@@ -10,6 +10,9 @@ from django.db.models import (
     FloatField,
     BooleanField,
     ImageField,
+    ManyToManyField,
+    FileField,
+    DecimalField,
     CASCADE,
 )
 from django.core.validators import MinValueValidator,MaxValueValidator
@@ -59,4 +62,13 @@ class Review(Model):
     created = DateTimeField(editable=False,blank=False,auto_now_add=True)
     updated = DateTimeField(editable=False,blank=False,auto_now=True)
 class Order(Model):
-    pass
+    id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+    customer = ForeignKey(User,related_name='orders',on_delete=CASCADE)
+    products = ManyToManyField(Product,related_name='orders')
+    coupon_code = CharField(max_length=21,blank=True,null=True)
+    amount = FloatField(editable=False)
+    discount = FloatField(editable=False)
+    final_amount = FloatField(editable=False)
+    invoice = FileField(editable=False,upload_to='invoices/')
+    created = DateTimeField(auto_now_add=True,editable=False,blank=False,null=False)
+    updated = DateTimeField(auto_now=True,editable=False,blank=False,null=False)
