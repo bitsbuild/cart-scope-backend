@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer,BooleanField,PrimaryKeyRelatedField
+from rest_framework.serializers import ModelSerializer,BooleanField,PrimaryKeyRelatedField,SlugRelatedField
 from app.models import Seller,ProductCategory,Product,ProductImages,Review,Order
 class ReviewSerializer(ModelSerializer):
     product = PrimaryKeyRelatedField(queryset=Product.objects.all())
@@ -27,6 +27,8 @@ class ProductCategorySerializer(ModelSerializer):
         model = ProductCategory
         fields = '__all__'
 class OrderSerializer(ModelSerializer):
+    products = SlugRelatedField(many=True,read_only=True,slug_field='name')
     class Meta:
         model = Order
         fields = '__all__'
+    
