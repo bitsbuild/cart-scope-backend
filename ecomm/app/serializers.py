@@ -1,6 +1,7 @@
-from rest_framework.serializers import ModelSerializer,BooleanField
+from rest_framework.serializers import ModelSerializer,BooleanField,PrimaryKeyRelatedField
 from app.models import Seller,ProductCategory,Product,ProductImages,Review,Order
 class ReviewSerializer(ModelSerializer):
+    product = PrimaryKeyRelatedField(queryset=Product.objects.all())
     class Meta:
         model = Review
         fields = '__all__'
