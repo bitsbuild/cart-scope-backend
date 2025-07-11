@@ -27,7 +27,6 @@ class ProductCategorySerializer(ModelSerializer):
         model = ProductCategory
         fields = '__all__'
 class OrderSerializer(ModelSerializer):
-    products = SlugRelatedField(many=True,read_only=True,slug_field='name')
     class Meta:
         model = Order
         fields = '__all__'
