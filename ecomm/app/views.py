@@ -48,9 +48,22 @@ class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        list_product_names = request.data['products']
-        print(list_product_names)
-        return Response()
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            product_id_list = request.data['products']
+            return Response(
+                {
+                    "Status":"Order Placed Successfully"
+                },
+                status=HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(
+                {
+                    "Status":"Order Placement Failure",
+                    "Error":str(e)
+                },
+                status=HTTP_400_BAD_REQUEST
+            )
