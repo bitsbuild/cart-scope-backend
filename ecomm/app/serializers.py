@@ -1,5 +1,5 @@
-from rest_framework.serializers import ModelSerializer,BooleanField,PrimaryKeyRelatedField,SlugRelatedField
-from app.models import Seller,ProductCategory,Product,ProductImages,Review,Order
+from rest_framework.serializers import ModelSerializer,BooleanField,PrimaryKeyRelatedField,StringRelatedField
+from app.models import Seller,ProductCategory,Product,ProductImages,Review,Order,OrderItem,CouponCode
 class ReviewSerializer(ModelSerializer):
     product = PrimaryKeyRelatedField(queryset=Product.objects.all())
     class Meta:
@@ -26,7 +26,20 @@ class ProductCategorySerializer(ModelSerializer):
     class Meta:
         model = ProductCategory
         fields = '__all__'
+class OrderItemSerializer(ModelSerializer):
+    product = StringRelatedField()
+    order = PrimaryKeyRelatedField()
+    class Meta:
+        model = OrderItem
+        fields = '__all__'
+class CouponCode(ModelSerializer):
+    class Meta:
+        model = CouponCode
+        fields = '__all__'
 class OrderSerializer(ModelSerializer):
+    order_items = OrderItemSerializer(many=True,read_only=True)
+    customer = StringRelatedField()
+    coupon_code = StringRelatedField()
     class Meta:
         model = Order
         fields = '__all__'

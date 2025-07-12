@@ -65,6 +65,8 @@ class CouponCode(Model):
     code = UUIDField(default=uuid.uuid4,editable=False,blank=False,primary_key=True)
     name = CharField(max_length=10)
     discount_percentage = FloatField(blank=False)
+    def __str__(self):
+        return self.name
 class Order(Model):
     id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     customer = ForeignKey(User,related_name='orders',on_delete=CASCADE)
