@@ -32,7 +32,7 @@ class OrderItemSerializer(ModelSerializer):
     class Meta:
         model = OrderItem
         fields = '__all__'
-class CouponCode(ModelSerializer):
+class CouponCodeSerializer(ModelSerializer):
     class Meta:
         model = CouponCode
         fields = '__all__'
