@@ -27,8 +27,8 @@ class ProductCategorySerializer(ModelSerializer):
         model = ProductCategory
         fields = '__all__'
 class OrderItemSerializer(ModelSerializer):
-    product = StringRelatedField()
-    order = PrimaryKeyRelatedField()
+    product = PrimaryKeyRelatedField(queryset=Product.objects.all())
+    order = PrimaryKeyRelatedField(queryset=Order.objects.all())
     class Meta:
         model = OrderItem
         fields = '__all__'
