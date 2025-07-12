@@ -61,14 +61,24 @@ class Review(Model):
     stars = IntegerField(blank=False,default=0,validators=[MinValueValidator(0),MaxValueValidator(5)])
     created = DateTimeField(editable=False,blank=False,auto_now_add=True)
     updated = DateTimeField(editable=False,blank=False,auto_now=True)
+class CouponCode(Model):
+    code = UUIDField(default=uuid.uuid4,editable=False,blank=False,primary_key=True)
+    name = CharField(max_length=10)
+    discount_percentage = FloatField(blank=False)
+    def __str__(self):
+        return self.name
 class Order(Model):
     id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     customer = ForeignKey(User,related_name='orders',on_delete=CASCADE)
-    products = ManyToManyField(Product,related_name='orders')
-    coupon_code = CharField(max_length=21,blank=True,null=True)
+    coupon_code = ForeignKey(CouponCode,related_name='orders',on_delete=CASCADE,blank=True,null=True)
     amount = FloatField(editable=False,blank=True,null=True)
     discount = FloatField(editable=False,blank=True,null=True)
     final_amount = FloatField(editable=False,blank=True,null=True)
     invoice = FileField(editable=False,upload_to='invoices/',blank=True,null=True)
     created = DateTimeField(auto_now_add=True,editable=False,blank=False,null=False)
     updated = DateTimeField(auto_now=True,editable=False,blank=False,null=False)
+class OrderItem(Model):
+    id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False,blank=False)
+    product = ForeignKey(Product,related_name='order_items',on_delete=CASCADE,blank=False)
+    order = ForeignKey(Order,related_name='order_items',on_delete=CASCADE,blank=False)
+    quantity = IntegerField(validators=[MinValueValidator(1)],blank=False)

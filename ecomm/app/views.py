@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
-from app.models import Seller,ProductCategory,Product,ProductImages,Review,Order
-from app.serializers import SellerSerializer,ProductCategorySerializer,ProductSerializer,ProductImagesSerializer,ReviewSerializer,OrderSerializer
+from app.models import Seller,ProductCategory,Product,ProductImages,Review,Order,CouponCode,OrderItem
+from app.serializers import SellerSerializer,ProductCategorySerializer,ProductSerializer,ProductImagesSerializer,ReviewSerializer,OrderSerializer,CouponCodeSerializer,OrderItemSerializer
 import statistics
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK,HTTP_400_BAD_REQUEST
@@ -52,7 +52,6 @@ class OrderViewSet(ModelViewSet):
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
-            product_id_list = request.data['products']
             return Response(
                 {
                     "Status":"Order Placed Successfully"
@@ -67,3 +66,9 @@ class OrderViewSet(ModelViewSet):
                 },
                 status=HTTP_400_BAD_REQUEST
             )
+class CouponCodeViewSet(ModelViewSet):
+    queryset = CouponCode.objects.all()
+    serializer_class = CouponCodeSerializer
+class OrderItemViewSet(ModelViewSet):
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
