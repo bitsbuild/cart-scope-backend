@@ -52,13 +52,6 @@ class OrderViewSet(ModelViewSet):
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
-            product_id_list = request.data['products']
-            product_name_list = list(
-                Product.objects.filter(pk__in=product_id_list).values_list('name',flat=True)
-            )
-            product_cost_list = list(
-                Product.objects.filter(pk__in=product_id_list).values_list('price',flat=True)
-            )
             return Response(
                 {
                     "Status":"Order Placed Successfully"
