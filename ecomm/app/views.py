@@ -69,6 +69,6 @@ class OrderViewSet(ModelViewSet):
 class CouponCodeViewSet(ModelViewSet):
     queryset = CouponCode.objects.all()
     serializer_class = CouponCodeSerializer
-class OrderItemsViewSet(ModelViewSet):
+class OrderItemViewSet(ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
