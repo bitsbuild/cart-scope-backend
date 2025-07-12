@@ -72,3 +72,26 @@ class CouponCodeViewSet(ModelViewSet):
 class OrderItemViewSet(ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
+    def create(self, request, *args, **kwargs):
+        try:
+            data_copy = request.data.copy()
+            product = data_copy['product']
+            price = Product.objects.get(pk=product).price
+            data_copy['amount'] = data_copy['quantity'] * price
+            serializer = self.get_serializer(data=data_copy)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            return Response(
+                    {
+                        "Status":"Order Item Created Successfully"
+                    },
+                    status=HTTP_200_OK
+                )
+        except Exception as e:
+            return Response(
+                {
+                    "Status":"Order Item Creation Failure",
+                    "Error":str(e)
+                },
+                status=HTTP_400_BAD_REQUEST
+            )

@@ -82,3 +82,4 @@ class OrderItem(Model):
     product = ForeignKey(Product,related_name='order_items',on_delete=CASCADE,blank=False)
     order = ForeignKey(Order,related_name='order_items',on_delete=CASCADE,blank=False)
     quantity = IntegerField(validators=[MinValueValidator(1)],blank=False)
+    amount = FloatField(null=True,default=None,blank=False,editable=False)
