@@ -80,7 +80,7 @@ class Order(Model):
 class OrderItem(Model):
     id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False,blank=False)
     product = ForeignKey(Product,related_name='order_items',on_delete=CASCADE,blank=False)
-    order = ForeignKey(Order,related_name='order_items',on_delete=CASCADE,blank=True)
+    order = ForeignKey(Order,related_name='order_items',on_delete=CASCADE,blank=False)
     quantity = IntegerField(validators=[MinValueValidator(1)],blank=False)
     amount = FloatField(null=True,default=None,blank=False)
     product_price = FloatField(null=True,default=None,blank=False)
