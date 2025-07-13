@@ -37,7 +37,7 @@ class CouponCodeSerializer(ModelSerializer):
         model = CouponCode
         fields = '__all__'
 class OrderSerializer(ModelSerializer):
-    order_items = OrderItemSerializer(many=True,read_only=True)
+    order_items = OrderItemSerializer(many=True)
     customer = StringRelatedField()
     coupon_code = StringRelatedField()
     class Meta:
