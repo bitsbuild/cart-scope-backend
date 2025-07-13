@@ -78,6 +78,7 @@ class OrderItemViewSet(ModelViewSet):
             product = data_copy['product']
             price = Product.objects.get(pk=product).price
             data_copy['amount'] = data_copy['quantity'] * price
+            data_copy['product_price'] = price
             serializer = self.get_serializer(data=data_copy)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
