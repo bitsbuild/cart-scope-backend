@@ -49,6 +49,11 @@ class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     def create(self, request, *args, **kwargs):
         try:
+            list_order_items = list(request.body['order_items'])
+            list_order_details = []
+            for i in list_order_items:
+                list_order_details.append([i['product'],i['product_price'],i['quantity'],i['amount']])
+            print(list_order_details)
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
