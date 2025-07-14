@@ -7,6 +7,10 @@ from rest_framework.status import HTTP_200_OK,HTTP_400_BAD_REQUEST
 from django.contrib.auth.models import User
 import weasyprint
 from django.core.files.base import ContentFile
+import smtplib
+from email.message import EmailMessage
+from dotenv import load_dotenv
+import os
 class SellerViewSet(ModelViewSet):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
@@ -197,8 +201,22 @@ class OrderViewSet(ModelViewSet):
 </body>
 </html>
 """
-        order.invoice.save(f'{order.id}.pdf',ContentFile(weasyprint.HTML(string=html_string).write_pdf()),save=False)
+        file_name = f'{order.id}.pdf'
+        order.invoice.save(file_name,ContentFile(weasyprint.HTML(string=html_string).write_pdf()),save=False)
         order.save()
+        load_dotenv()
+        msg = EmailMessage()
+        msg['Subject'] = 'Your Order Was Placed Successfully'
+        msg['From'] = os.getenv('EMAIL_USER')
+        msg['To'] = str(customer.email)
+        msg.set_content('Find Attached Invoice For Your Order, Keep Shopping!!!')
+        with order.invoice.open('rb') as f:
+            file_data = f.read()
+        msg.add_attachment(file_data, maintype='application', subtype='pdf', filename=file_name)
+        with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+            smtp.starttls()
+            smtp.login(os.getenv('EMAIL_USER'), os.getenv('EMAIL_PASS'))
+            smtp.send_message(msg)
         try:
             return Response(
                 {
