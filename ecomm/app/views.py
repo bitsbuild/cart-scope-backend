@@ -50,7 +50,7 @@ class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     def create(self, request, *args, **kwargs):
-        customer = User.objects.get(pk=request.data['customer']).pk
+        customer = User.objects.get(pk=request.data['customer'])
         coupon_code = CouponCode.objects.get(name=request.data['coupon_code'])
         order = Order.objects.create(
             customer=customer,
