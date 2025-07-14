@@ -1,10 +1,11 @@
 from rest_framework.viewsets import ModelViewSet
-from app.billing import billing
+# from app.billing import billing
 from app.models import Seller,ProductCategory,Product,ProductImages,Review,Order,CouponCode,OrderItem
 from app.serializers import SellerSerializer,ProductCategorySerializer,ProductSerializer,ProductImagesSerializer,ReviewSerializer,OrderSerializer,CouponCodeSerializer,OrderItemSerializer
 import statistics
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK,HTTP_400_BAD_REQUEST
+from django.contrib.auth.models import User
 class SellerViewSet(ModelViewSet):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
@@ -48,10 +49,13 @@ class ReviewViewSet(ModelViewSet):
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-class CouponCodeViewSet(ModelViewSet):
-    queryset = CouponCode.objects.all()
-    serializer_class = CouponCodeSerializer
     def create(self, request, *args, **kwargs):
+        customer = User.objects.get(pk=request.data['customer']).pk
+        coupon_code = CouponCode.objects.get(name=request.data['coupon_code'])
+        order = Order.objects.create(
+            customer=customer,
+            coupon_code=coupon_code
+        )
         try:
             return Response(
                 {
@@ -65,6 +69,9 @@ class CouponCodeViewSet(ModelViewSet):
                     'Error':str(e)
                 },status=HTTP_400_BAD_REQUEST
             )
+class CouponCodeViewSet(ModelViewSet):
+    queryset = CouponCode.objects.all()
+    serializer_class = CouponCodeSerializer
 class OrderItemViewSet(ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
