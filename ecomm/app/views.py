@@ -51,6 +51,20 @@ class OrderViewSet(ModelViewSet):
 class CouponCodeViewSet(ModelViewSet):
     queryset = CouponCode.objects.all()
     serializer_class = CouponCodeSerializer
+    def create(self, request, *args, **kwargs):
+        try:
+            return Response(
+                {
+                    'Status':'Ordered Place Successfully!'
+                },status=HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(
+                {
+                    'Status':'So Sorry, Order Could Not Be Placed!',
+                    'Error':str(e)
+                },status=HTTP_400_BAD_REQUEST
+            )
 class OrderItemViewSet(ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
