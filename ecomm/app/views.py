@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
+from app.billing import billing
 from app.models import Seller,ProductCategory,Product,ProductImages,Review,Order,CouponCode,OrderItem
 from app.serializers import SellerSerializer,ProductCategorySerializer,ProductSerializer,ProductImagesSerializer,ReviewSerializer,OrderSerializer,CouponCodeSerializer,OrderItemSerializer
 import statistics
@@ -49,14 +50,43 @@ class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     def create(self, request, *args, **kwargs):
         try:
-            list_order_items = list(request.body['order_items'])
-            list_order_details = []
-            for i in list_order_items:
-                list_order_details.append([i['product'],i['product_price'],i['quantity'],i['amount']])
-            print(list_order_details)
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
+            order = Order.objects.create(customer=request.user.pk,coupon_code=request.data['coupon_code'])
+            order_id = order.id
+            order_items_id_list = []
+            order_items_quantity_list = []
+            order_items_price_list = []
+            order_items_product_names = []
+            for i in request.data['order_items']:
+                quant = int(i['quantity'])
+                order_items_quantity_list.append(quant)
+                pro_price = int(Product.objects.get(pk=i['product']).price)
+                order_items_price_list.append(pro_price)
+                prod = i['product']
+                product_name = Product.objects.get(pk=prod).name
+                order_items_product_names.append(product_name)
+                order_items_id_list.append(OrderItem.objects.create(
+                    product=prod,
+                    order=order_id,
+                    quantity=quant,
+                    product_price=pro_price,
+                    amount=quant*pro_price,
+                ).pk)
+            try:
+                disc = float(CouponCode.objects.get(name=request.data['coupon_code']).discount_percentage)
+            except:
+                disc = 0
+            bill_response = billing(
+                product_name_list=order_items_product_names,
+                product_price_list=order_items_price_list,
+                product_quantity_list=order_items_quantity_list,
+                discount_percentage=disc
+            )
+            order.order_items = order_items_id_list
+            order.amount = bill_response['amount']
+            order.discount = bill_response['discount']
+            order.final_amount = bill_response['final_amount']
+            order.invoice = bill_response['invoice']
+            order.save()
             return Response(
                 {
                     "Status":"Order Placed Successfully"
@@ -77,27 +107,3 @@ class CouponCodeViewSet(ModelViewSet):
 class OrderItemViewSet(ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
-    def create(self, request, *args, **kwargs):
-        try:
-            data_copy = request.data.copy()
-            product = data_copy['product']
-            price = int(Product.objects.get(pk=product).price)
-            data_copy['amount'] = int(data_copy['quantity']) * price
-            data_copy['product_price'] = price
-            serializer = self.get_serializer(data=data_copy)
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
-            return Response(
-                    {
-                        "Status":"Order Item Created Successfully"
-                    },
-                    status=HTTP_200_OK
-                )
-        except Exception as e:
-            return Response(
-                {
-                    "Status":"Order Item Creation Failure",
-                    "Error":str(e)
-                },
-                status=HTTP_400_BAD_REQUEST
-            )

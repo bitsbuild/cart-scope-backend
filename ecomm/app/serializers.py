@@ -37,7 +37,7 @@ class CouponCodeSerializer(ModelSerializer):
         model = CouponCode
         fields = '__all__'
 class OrderSerializer(ModelSerializer):
-    order_items = OrderItemSerializer(many=True)
+    order_items = PrimaryKeyRelatedField(many=True,queryset=OrderItem.objects.all())
     customer = StringRelatedField()
     coupon_code = StringRelatedField()
     class Meta:
