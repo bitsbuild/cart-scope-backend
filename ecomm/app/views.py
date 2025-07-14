@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
+from app.billing import billing
 from app.models import Seller,ProductCategory,Product,ProductImages,Review,Order,CouponCode,OrderItem
 from app.serializers import SellerSerializer,ProductCategorySerializer,ProductSerializer,ProductImagesSerializer,ReviewSerializer,OrderSerializer,CouponCodeSerializer,OrderItemSerializer
 import statistics
@@ -71,9 +72,21 @@ class OrderViewSet(ModelViewSet):
                     amount=quant*pro_price,
                 ).pk)
             try:
-                order.discount = CouponCode.objects.get(name=request.data['coupon_code']).discount_percentage
+                disc = float(CouponCode.objects.get(name=request.data['coupon_code']).discount_percentage)
             except:
-                order.discount = 0
+                disc = 0
+            bill_response = billing(
+                product_name_list=order_items_product_names,
+                product_price_list=order_items_price_list,
+                product_quantity_list=order_items_quantity_list,
+                discount_percentage=disc
+            )
+            order.order_items = order_items_id_list
+            order.amount = bill_response['amount']
+            order.discount = bill_response['discount']
+            order.final_amount = bill_response['final_amount']
+            order.invoice = bill_response['invoice']
+            order.save()
             return Response(
                 {
                     "Status":"Order Placed Successfully"
