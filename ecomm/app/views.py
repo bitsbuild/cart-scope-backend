@@ -1,5 +1,4 @@
 from rest_framework.viewsets import ModelViewSet
-# from app.billing import billing
 from app.models import Seller,ProductCategory,Product,ProductImages,Review,Order,CouponCode,OrderItem
 from app.serializers import SellerSerializer,ProductCategorySerializer,ProductSerializer,ProductImagesSerializer,ReviewSerializer,OrderSerializer,CouponCodeSerializer,OrderItemSerializer
 import statistics
@@ -56,6 +55,30 @@ class OrderViewSet(ModelViewSet):
             customer=customer,
             coupon_code=coupon_code
         )
+        order_items = []
+        details_for_bill = []
+        for i in request.data['order_items']:
+            prod = Product.objects.get(pk=i['product'])
+            quant = int(i['quantity'])
+            pro_price = prod.price
+            amnt = pro_price*quant
+            order_items.append(OrderItem.objects.create(
+                                      order=order,
+                                      product=prod,
+                                      quantity=quant,
+                                      product_price=pro_price,
+                                      amount = amnt
+                                    ))
+            details_for_bill.append([
+                order,prod,quant,pro_price,amnt
+            ])
+        amount = 0
+        for i in details_for_bill:
+            amount = amount + i[4]
+        order.amount = amount
+        order.discount = ((int(CouponCode.objects.get(name=request.data['coupon_code']).discount_percentage)*amount)/100) if CouponCode.objects.get(name=request.data['coupon_code']) else 0
+        order.final_amount = order.amount - order.discount
+        order.save()
         try:
             return Response(
                 {
