@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK,HTTP_400_BAD_REQUEST
 from django.contrib.auth.models import User
 import weasyprint
+from django.core.files.base import ContentFile
 class SellerViewSet(ModelViewSet):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
@@ -79,6 +80,8 @@ class OrderViewSet(ModelViewSet):
         order.amount = amount
         order.discount = ((int(CouponCode.objects.get(name=request.data['coupon_code']).discount_percentage)*amount)/100) if CouponCode.objects.get(name=request.data['coupon_code']) else 0
         order.final_amount = order.amount - order.discount
+        html_string = ''
+        order.invoice.save(f'{order.id}.pdf',ContentFile(weasyprint.HTML(string=html_string).write_pdf()),save=False)
         order.save()
         try:
             return Response(
