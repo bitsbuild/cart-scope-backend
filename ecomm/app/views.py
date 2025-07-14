@@ -49,7 +49,31 @@ class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     def create(self, request, *args, **kwargs):
         try:
-            order = Order.objects.create()
+            order = Order.objects.create(customer=request.user.pk,coupon_code=request.data['coupon_code'])
+            order_id = order.id
+            order_items_id_list = []
+            order_items_quantity_list = []
+            order_items_price_list = []
+            order_items_product_names = []
+            for i in request.data['order_items']:
+                quant = int(i['quantity'])
+                order_items_quantity_list.append(quant)
+                pro_price = int(Product.objects.get(pk=i['product']).price)
+                order_items_price_list.append(pro_price)
+                prod = i['product']
+                product_name = Product.objects.get(pk=prod).name
+                order_items_product_names.append(product_name)
+                order_items_id_list.append(OrderItem.objects.create(
+                    product=prod,
+                    order=order_id,
+                    quantity=quant,
+                    product_price=pro_price,
+                    amount=quant*pro_price,
+                ).pk)
+            try:
+                order.discount = CouponCode.objects.get(name=request.data['coupon_code']).discount_percentage
+            except:
+                order.discount = 0
             return Response(
                 {
                     "Status":"Order Placed Successfully"
