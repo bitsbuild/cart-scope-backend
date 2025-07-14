@@ -1,3 +1,4 @@
+import weasyprint
 def billing(product_name_list,product_quantity_list,product_price_list,discount_percentage):
     amnt = sum(product_price_list)
     disc = (discount_percentage*amnt)/100
