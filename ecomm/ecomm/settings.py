@@ -79,6 +79,10 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter'
         ],
+    'DEFAULT_THROTTLE_CLASSES':['rest_framework.throttling.UserRateThrottle'],
+    'DEFAULT_THROTTLE_RATE':{
+        'user':'60/min'
+    }
 }
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")
