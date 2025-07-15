@@ -14,7 +14,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'user',
-    'app'
+    'app',
+    'django_filters',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -73,6 +74,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.CursorPagination',
     'PAGE_SIZE':25,
+    'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.DjangoFilterBackend'],
 }
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")
