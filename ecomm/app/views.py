@@ -33,7 +33,7 @@ class ProductImagesViewSet(ModelViewSet):
 class ReviewViewSet(ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [rp.ReviewPermissions]
+    permission_classes = [IsAuthenticated,rp.ReviewPermissions]
     def create(self, request, *args, **kwargs):
         try:
             serializer = self.get_serializer(data=request.data)
