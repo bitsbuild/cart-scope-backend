@@ -79,9 +79,9 @@ class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated,rp.OrderPermissions]
     http_method_names = ['post','get']
-    filterset_fields = ['id','customer','coupon_code','amount','discount','final_amount','invoice','created','updated']
-    search_fields = ['id','customer','coupon_code','amount','discount','final_amount','invoice','created','updated']
-    ordering_fields = ['id','customer','coupon_code','amount','discount','final_amount','invoice','created','updated']
+    filterset_fields = ['id','customer','coupon_code','amount','discount','final_amount','created','updated']
+    search_fields = ['id','customer','coupon_code','amount','discount','final_amount','created','updated']
+    ordering_fields = ['id','customer','coupon_code','amount','discount','final_amount','created','updated']
     def create(self, request, *args, **kwargs):
         try:
             with transaction.atomic():
