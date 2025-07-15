@@ -15,3 +15,5 @@ class ReviewPermissions(BasePermission):
                 return True
             else:
                 return False
+class OrderPermissions(BasePermission):
+    pass
