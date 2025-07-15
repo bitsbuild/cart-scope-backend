@@ -14,6 +14,7 @@ from django.db.models import (
     FileField,
     DecimalField,
     CASCADE,
+    UniqueConstraint,
 )
 from django.core.validators import MinValueValidator,MaxValueValidator
 from django.contrib.auth.models import User
@@ -30,11 +31,20 @@ class Seller(Model):
     updated = DateTimeField(auto_now=True,editable=False,blank=False)
     def __str__(self):
         return self.name
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['name'],name='unique_name'),
+            UniqueConstraint(fields=['about'],name='unique_name')
+        ]
 class ProductCategory(Model):
     id = UUIDField(primary_key=True,editable=False,default=uuid.uuid4,blank=False)
     name = CharField(max_length=700,blank=False)
     def __str__(self):
         return self.name
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['name'],name='unique_category_name')
+        ]
 class Product(Model):
     id = UUIDField(primary_key=True,editable=False,default=uuid.uuid4,blank=False)
     name = CharField(max_length=700,blank=False)
@@ -48,6 +58,10 @@ class Product(Model):
     updated = DateTimeField(auto_now=True,editable=False,blank=False)
     def __str__(self):
         return self.name
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['seller','name'],name='unique_procut_unique_seller_pair')
+        ]
 class ProductImages(Model):
     id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False,blank=False)
     image = ImageField(blank=False,upload_to='product-images/')
@@ -61,12 +75,20 @@ class Review(Model):
     stars = IntegerField(blank=False,default=0,validators=[MinValueValidator(0),MaxValueValidator(5)])
     created = DateTimeField(editable=False,blank=False,auto_now_add=True)
     updated = DateTimeField(editable=False,blank=False,auto_now=True)
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['user','product'],name='one_review_per_user')
+        ]
 class CouponCode(Model):
     code = UUIDField(default=uuid.uuid4,editable=False,blank=False,primary_key=True)
     name = CharField(max_length=10)
     discount_percentage = FloatField(blank=False)
     def __str__(self):
         return self.name
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['name'],name='unique_coupon_name')
+        ]
 class Order(Model):
     id = UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     customer = ForeignKey(User,related_name='orders',on_delete=CASCADE)
