@@ -16,4 +16,11 @@ class ReviewPermissions(BasePermission):
             else:
                 return False
 class OrderPermissions(BasePermission):
-    pass
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            return True
+        if request.method == 'GET':
+            if request.user.is_staff and request.user.is_superuser:
+                return True
+            else:
+                return False

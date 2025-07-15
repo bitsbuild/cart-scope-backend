@@ -34,7 +34,7 @@ class Seller(Model):
     class Meta:
         constraints = [
             UniqueConstraint(fields=['name'],name='unique_name'),
-            UniqueConstraint(fields=['about'],name='unique_name')
+            UniqueConstraint(fields=['about'],name='unique_about')
         ]
 class ProductCategory(Model):
     id = UUIDField(primary_key=True,editable=False,default=uuid.uuid4,blank=False)

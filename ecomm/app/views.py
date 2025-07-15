@@ -18,36 +18,37 @@ class SellerViewSet(ModelViewSet):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
     permission_classes = [IsAdminUser]
-    filterset_fields = ['postal_code','created','updated','rating','location','is_premium_seller']
-    search_fields = ['id','name','postal_code','created','updated','rating','location','is_premium_seller']
-    ordering_fields = ['id','name','postal_code','created','updated','rating','location','is_premium_seller']
+    filterset_fields = ['id','name','about','postal_code','location','is_premium_seller','rating','created','updated']
+    search_fields = ['id','name','about','postal_code','location','is_premium_seller','rating','created','updated']
+    ordering_fields = ['id','name','about','postal_code','location','is_premium_seller','rating','created','updated']
 class ProductCategoryViewSet(ModelViewSet):
     queryset = ProductCategory.objects.all()
     serializer_class = ProductCategorySerializer
     permission_classes = [IsAdminUser]
+    filterset_fields = ['id','name']
     search_fields = ['id','name']
     ordering_fields = ['id','name']
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAdminUser]
-    filterset_fields = ['category','seller','price','rating','created','updated']
-    search_fields = ['id','name','category','seller','price','rating','created','updated']
-    ordering_fields = ['id','name','category','seller','price','rating','created','updated']
+    filterset_fields = ['id','name','about','category','seller','quantity','price','rating','created','updated']
+    search_fields = ['id','name','about','category','seller','quantity','price','rating','created','updated']
+    ordering_fields = ['id','name','about','category','seller','quantity','price','rating','created','updated']
 class ProductImagesViewSet(ModelViewSet):
     queryset=ProductImages.objects.all()
     serializer_class=ProductImagesSerializer
     permission_classes = [IsAdminUser]
-    filterset_fields = ['product']
-    search_fields = ['id','product']
-    ordering_fields = ['product','id']
+    filterset_fields = ['id','name','product']
+    search_fields = ['id','name','product']
+    ordering_fields = ['id','name','product']
 class ReviewViewSet(ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated,rp.ReviewPermissions]
-    filterset_fields = ['user','product','stars','created','updated']
-    search_fields = ['id','user','product','stars','created','updated','title']
-    ordering_fields = ['id','user','product','stars','created','updated','title']
+    filterset_fields = ['id','user','product','title','body','stars','created','updated']
+    search_fields = ['id','user','product','title','body','stars','created','updated']
+    ordering_fields = ['id','user','product','title','body','stars','created','updated']
     def create(self, request, *args, **kwargs):
         try:
             serializer = self.get_serializer(data=request.data)
@@ -78,8 +79,9 @@ class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated,rp.OrderPermissions]
     http_method_names = ['post','get']
-    search_fields = ['id','customer','created','updated']
-    ordering_fields = ['id','customer','created','updated']
+    filterset_fields = ['id','customer','coupon_code','amount','discount','final_amount','created','updated']
+    search_fields = ['id','customer','coupon_code','amount','discount','final_amount','created','updated']
+    ordering_fields = ['id','customer','coupon_code','amount','discount','final_amount','created','updated']
     def create(self, request, *args, **kwargs):
         try:
             with transaction.atomic():
@@ -261,11 +263,13 @@ class CouponCodeViewSet(ModelViewSet):
     queryset = CouponCode.objects.all()
     serializer_class = CouponCodeSerializer
     permission_classes = [IsAdminUser]
-    filterset_fields = ['discount_percentage']
-    search_fields = ['name','code','discount_percentage']
-    ordering_fields = ['name','code','discount_percentage']
+    filterset_fields = ['code','name','discount_percentage']
+    search_fields = ['code','name','discount_percentage']
+    ordering_fields = ['code','name','discount_percentage']
 class OrderItemViewSet(ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
     permission_classes = [IsAdminUser]
-    search_fields = ['id']
+    filterset_fields = ['id','product','order','quantity','amount','product_price']
+    search_fields = ['id','product','order','quantity','amount','product_price']
+    ordering_fields = ['id','product','order','quantity','amount','product_price']
