@@ -12,21 +12,28 @@ from email.message import EmailMessage
 from dotenv import load_dotenv
 import os
 from django.db import transaction
+from rest_framework.permissions import IsAdminUser,IsAuthenticated
+import app.review_permissions as rp
 class SellerViewSet(ModelViewSet):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
+    permission_classes = [IsAdminUser]
 class ProductCategoryViewSet(ModelViewSet):
     queryset = ProductCategory.objects.all()
     serializer_class = ProductCategorySerializer
+    permission_classes = [IsAdminUser]
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [IsAdminUser]
 class ProductImagesViewSet(ModelViewSet):
     queryset=ProductImages.objects.all()
     serializer_class=ProductImagesSerializer
+    permission_classes = [IsAdminUser]
 class ReviewViewSet(ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [rp.ReviewPermissions]
     def create(self, request, *args, **kwargs):
         try:
             serializer = self.get_serializer(data=request.data)
@@ -55,6 +62,8 @@ class ReviewViewSet(ModelViewSet):
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['post']
     def create(self, request, *args, **kwargs):
         try:
             with transaction.atomic():
@@ -235,6 +244,8 @@ class OrderViewSet(ModelViewSet):
 class CouponCodeViewSet(ModelViewSet):
     queryset = CouponCode.objects.all()
     serializer_class = CouponCodeSerializer
+    permission_classes = [IsAdminUser]
 class OrderItemViewSet(ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
+    permission_classes = [IsAdminUser]
