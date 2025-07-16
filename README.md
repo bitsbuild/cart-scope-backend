@@ -298,6 +298,7 @@ Response:
 
 ---
 
-## 📬 Contact
+## Highlight Feature
 
-Feel free to raise an issue or contribute!
+On Placing A Order An Invoice Is Stored To The Order Instance, And The Invoice Is Also Mailed To The User
+![Screenshot](./documentation/doc.png)
