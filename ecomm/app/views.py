@@ -205,8 +205,8 @@ class OrderViewSet(ModelViewSet):
                     <tr class="item">
                         <td>{i[1].name}</td>
                         <td>{i[2]}</td>
-                        <td>₹{i[3]}</td>
-                        <td>₹{i[4]}</td>
+                        <td>Rs. {i[3]}</td>
+                        <td>Rs. {i[4]}</td>
                     </tr>
                     """ for i in details_for_bill)}
 
@@ -214,19 +214,19 @@ class OrderViewSet(ModelViewSet):
                         <td></td>
                         <td></td>
                         <td>Subtotal:</td>
-                        <td>₹{order.amount}</td>
+                        <td>Rs. {order.amount}</td>
                     </tr>
                     <tr class="total">
                         <td></td>
                         <td></td>
                         <td>Discount:</td>
-                        <td>- ₹{order.discount}</td>
+                        <td>- Rs. {order.discount}</td>
                     </tr>
                     <tr class="total">
                         <td></td>
                         <td></td>
                         <td>Total:</td>
-                        <td>₹{order.final_amount}</td>
+                        <td>Rs. {order.final_amount}</td>
                     </tr>
                 </table>
 
