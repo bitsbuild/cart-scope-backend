@@ -201,14 +201,7 @@ class OrderViewSet(ModelViewSet):
                         <td>Line Total</td>
                     </tr>
 
-                    {''.join(f"""
-                    <tr class="item">
-                        <td>{i[1].name}</td>
-                        <td>{i[2]}</td>
-                        <td>Rs. {i[3]}</td>
-                        <td>Rs. {i[4]}</td>
-                    </tr>
-                    """ for i in details_for_bill)}
+                    {''.join(f"""<tr class="item"><td>{i[1].name}</td><td>{i[2]}</td><td>Rs. {i[3]}</td><td>Rs. {i[4]}</td></tr>""" for i in details_for_bill)}
 
                     <tr class="total">
                         <td></td>
