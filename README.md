@@ -2,6 +2,7 @@
 
 A full-featured Django REST Framework backend for an e-commerce platform.  
 Includes **user management**, **seller and product management**, **product images**, **reviews**, **orders**, **coupon codes**, PDF **invoice generation**, and **email notifications**.
+Deployed With Render: https://cart-scope-backend.onrender.com (Use Endpoints By Suffixing To This URL)
 
 ---
 
