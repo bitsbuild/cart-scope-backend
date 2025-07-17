@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 SECRET_KEY = os.getenv('DSK')
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['cart-scope-backend.onrender.com','localhost','127.0.0.0']
 INSTALLED_APPS = [
     'django.contrib.admin',
