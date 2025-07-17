@@ -109,7 +109,7 @@ class OrderViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         try:
             with transaction.atomic():
-                customer = User.objects.get(pk=request.data['customer'])
+                customer = request.user
                 coupon_code = CouponCode.objects.get(name=request.data['coupon_code'])
                 order = Order.objects.create(
                     customer=customer,
