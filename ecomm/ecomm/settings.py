@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 SECRET_KEY = os.getenv('DSK')
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cart-scope-backend.onrender.com','localhost','127.0.0.0']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
