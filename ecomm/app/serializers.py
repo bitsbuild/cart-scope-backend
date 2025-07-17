@@ -4,7 +4,11 @@ class ReviewSerializer(ModelSerializer):
     product = PrimaryKeyRelatedField(queryset=Product.objects.all())
     class Meta:
         model = Review
-        fields = '__all__'
+        fields = ['id', 'product', 'title', 'body', 'stars', 'created', 'updated']
+        read_only_fields = ['id', 'created', 'updated']
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
 class ProductImagesSerializer(ModelSerializer):
     class Meta:
         model = ProductImages
