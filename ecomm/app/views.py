@@ -25,6 +25,7 @@ class SellerViewSet(ModelViewSet):
     serializer_class = SellerSerializer
     permission_classes = [IsAdminUser]
     throttle_classes = [UserRateThrottle]
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id', 'name', 'about', 'postal_code', 'location', 'is_premium_seller', 'rating', 'created', 'updated']
     search_fields = filterset_fields
     ordering_fields = filterset_fields
@@ -35,6 +36,7 @@ class ProductCategoryViewSet(ModelViewSet):
     serializer_class = ProductCategorySerializer
     permission_classes = [IsAdminUser]
     throttle_classes = [UserRateThrottle]
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id', 'name']
     search_fields = filterset_fields
     ordering_fields = filterset_fields
@@ -45,6 +47,7 @@ class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [IsAdminUser]
     throttle_classes = [UserRateThrottle]
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id', 'name', 'about', 'category', 'seller', 'quantity', 'price', 'rating', 'created', 'updated']
     search_fields = filterset_fields
     ordering_fields = filterset_fields
@@ -55,6 +58,7 @@ class ProductImagesViewSet(ModelViewSet):
     serializer_class = ProductImagesSerializer
     permission_classes = [IsAdminUser]
     throttle_classes = [UserRateThrottle]
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id', 'product']
     search_fields = filterset_fields
     ordering_fields = filterset_fields
@@ -65,6 +69,7 @@ class ReviewViewSet(ModelViewSet):
     serializer_class = ReviewSerializer
     throttle_classes = [UserRateThrottle]
     permission_classes = [IsAuthenticated, rp.ReviewPermissions]
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id', 'user', 'product', 'title', 'body', 'stars', 'created', 'updated']
     search_fields = filterset_fields
     ordering_fields = filterset_fields
@@ -102,6 +107,7 @@ class OrderViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, rp.OrderPermissions]
     throttle_classes = [UserRateThrottle]
     http_method_names = ['post', 'get']
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id', 'customer', 'coupon_code', 'amount', 'discount', 'final_amount', 'created', 'updated']
     search_fields = filterset_fields
     ordering_fields = filterset_fields
@@ -291,6 +297,7 @@ class CouponCodeViewSet(ModelViewSet):
     serializer_class = CouponCodeSerializer
     permission_classes = [IsAdminUser]
     throttle_classes = [UserRateThrottle]
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ['code', 'name', 'discount_percentage']
     search_fields = filterset_fields
     ordering_fields = filterset_fields
@@ -301,6 +308,7 @@ class OrderItemViewSet(ModelViewSet):
     serializer_class = OrderItemSerializer
     permission_classes = [IsAdminUser]
     throttle_classes = [UserRateThrottle]
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id', 'product', 'order', 'quantity', 'amount', 'product_price']
     search_fields = filterset_fields
     ordering_fields = filterset_fields
